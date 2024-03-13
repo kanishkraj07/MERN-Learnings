@@ -21,6 +21,13 @@ function readFile(file) {
     });
 }
 
+async function asyncReadFile(fileName, res) {
+    const fileContent =  await readFile(fileName);
+    res.status(200).json({
+      fileContent
+  });
+  }
+
 function isFilePresent(files, requiredFile) {
     for(let file of files) {
         if(file === requiredFile) {
@@ -43,11 +50,7 @@ app.get("/file", (req, res) => {
 
     getFiles().then((files) => {
         if(isFilePresent(files, fileName)) {
-            readFile(fileName).then((fileContent) => {
-                res.status(200).json({
-                    fileContent
-                });
-            });
+            asyncReadFile(fileName, res);
         } else{
             res.status(404).send("file not found");
         }
