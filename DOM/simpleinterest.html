@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <input type="text" id="principle" placeholder="Enter principle amount"> <br> <br>
+    <input type="text" id="rate" placeholder="Enter rate"> <br> <br>
+    <input type="text" id="time" placeholder="Enter time"> <br> <br>
+    <button onclick="calculateSi()">Calculate</button> <br> <br>
+    <div></div>
+    <script>
+        const principle = document.querySelector('#principle');
+        const rate = document.querySelector('#rate');
+        const time =document.querySelector('#time');
+        const finalVal = document.querySelector('div');
+        
+        async function calculateSi() {
+            const response = await fetch(`http:localhost:3000/simpleinterest?principle=${principle.value}&rate=${rate.value}&time=${time.value}`);
+            const data = await response.json();
+            finalVal.innerHTML = `Final Date: <b>${JSON.stringify(data)}</b>`;
+        }
+    </script>
+</body>
+</html>

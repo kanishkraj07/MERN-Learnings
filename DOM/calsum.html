@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<input oninput="debouncPopulateDiv()" id="first" type="text" placeholder="first number"> <br> <br>
+<input oninput="debouncPopulateDiv()" id="second" type="text" placeholder="second number"> <br> <br>
+<button onclick="getSum()">SUM</button> <br>
+<p></p>
+    <script>
+        let clock;
+        const inputEle1 = document.querySelector('#first');
+        const inputEle2 = document.querySelector("#second");
+        const sumbtn = document.querySelector('button');
+        const para = document.querySelector('p');
+
+        function debouncPopulateDiv() {
+            clearTimeout(clock);
+            clock = setTimeout(() => {
+                getSum();
+            }, 1000);
+        }
+
+        async function getSum() {
+            const a = inputEle1.value;
+            const b  = inputEle2.value;
+         const response =  await fetch(`http://localhost:3000/sum?a=${a}&b=${b}`);
+         const sum = await response.text();
+         para.innerText = `You sum is: ${sum}`;
+        }
+
+        function populateDiv() {
+        getSum();
+          const newDiv =  document.createElement('div');
+          newDiv.innerHTML = "<b>Hello World</b>";
+          document.body.appendChild(newDiv);
+        }
+    </script>
+</body>
+</html>
