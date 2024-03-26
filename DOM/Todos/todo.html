@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Todo App</h1>
+    <input type="text" id="title" placeholder="Enter title"> <br> <br>
+    <input type="text" id="description" placeholder="Enter description"> <br><br>
+    <button onclick="addTodo()">Add Todo</button> <br><br>
+
+    <div class="todo-list"></div>
+</body>
+
+<script>
+
+let newTodos = [];
+let oldTodos = [];
+const titleRef = document.querySelector('#title');
+const descriptionRef = document.querySelector('#description');
+const todoListRef = document.querySelector('.todo-list');
+
+setInterval(async () => {
+    const response = await fetch('http://localhost:3000/allTodos');
+    const data = await response.json();
+    newTodos = data.todos;
+    renderTodos();
+}, 5000);
+
+      function addTodo(newTodo) {
+        const todoParent = document.createElement('div');
+        const todoTitle = document.createElement('div');
+        const todoDescription = document.createElement('div');
+        todoParent.setAttribute('id', `todo${newTodo.id}`);
+        todoTitle.innerHTML = `<b>${newTodo.title}</b>`;
+        todoDescription.innerHTML = `${newTodo.description}`;
+        todoParent.appendChild(todoTitle);
+        todoParent.appendChild(todoDescription);
+        todoListRef.appendChild(todoParent);
+      }
+
+      function deleteTodo(todo) {
+        const todoParentEle = document.querySelector(`#todo${todo.id}`);
+        todoListRef.removeChild(todoParentEle);
+    }
+
+    function updateTodo(todo) {
+        const todoParentEle = document.querySelector(`#todo${todo.id}`);
+        todoParentEle.children[0].innerHTML = todo.title;
+        todoParentEle.children[1].innerHTML = todo.description;
+    }
+ 
+      function renderTodos() {
+        // todoListRef.innerHTML = "";  
+        if(!oldTodos.length) {
+                for(let todo of newTodos) {
+                const todoParent = document.createElement('div');
+                const todoTitle = document.createElement('div');
+                const todoDescription = document.createElement('div');
+                todoParent.setAttribute('id', `todo${todo.id}`);
+                todoTitle.innerHTML = `<b>${todo.title}</b>`;
+                todoDescription.innerHTML = `${todo.description}`;
+                todoParent.appendChild(todoTitle);
+                todoParent.appendChild(todoDescription);
+                todoListRef.appendChild(todoParent);
+            }
+        } else {
+            const addTodos = [];
+            const deleteTodos = [];
+            const updateTodos = [];
+
+        /* calculate difference between old and new todos */
+
+        const oldTodoMap = new Map();
+        const newTodoMap = new Map();
+
+        for(let oldTodo of oldTodos) {
+            oldTodoMap.set(oldTodo.id, oldTodo);
+        }
+
+            for(let newTodo of newTodos) { 
+                if(!oldTodoMap.has(newTodo.id)) {
+                addTodos.push(newTodo);
+            } else {
+                const oldTodo = oldTodoMap.get(newTodo.id);
+                if(oldTodo.title !== newTodo.title || oldTodo.description !== newTodo.description) {
+                    updateTodos.push(newTodo);
+                }
+            }
+        }
+
+        for(let newTodo of newTodos) {
+            newTodoMap.set(newTodo.id, newTodo);
+        }
+
+        for(let oldTodo of oldTodos) {
+            if(!newTodoMap.has(oldTodo.id)) {
+                deleteTodos.push(oldTodo);
+            }
+        }
+
+        /* Update DOM based on your calculated difference between old and new todos */
+
+        if(addTodos.length) {
+            addTodos.forEach((newTodo) => {
+            addTodo(newTodo);
+        });
+
+        }
+
+        if(deleteTodos.length) {
+            deleteTodos.forEach((todo) => {
+            deleteTodo(todo)
+        });
+        }
+
+
+        if(updateTodos.length) {
+            updateTodos.forEach(todo => {
+            updateTodo(todo);
+        })
+        }
+    }
+    oldTodos = newTodos;
+}
+
+</script>
+
+</html>

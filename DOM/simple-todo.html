@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Todo App</h1>
+    <input type="text" id="title" placeholder="Enter title"> <br> <br>
+    <input type="text" id="description" placeholder="Enter description"> <br><br>
+    <button onclick="addTodo()">Add Todo</button> <br><br>
+
+    <div class="todo-list"></div>
+
+
+    <script>
+            const titleRef = document.querySelector('#title');
+            const descriptionRef = document.querySelector('#description');
+            const todoListRef = document.querySelector('.todo-list');
+
+           function addTodo() {
+            const todoTitle = document.createElement('div');
+            const todoDescription = document.createElement('div');
+            const markBtn = document.createElement('button');
+            todoTitle.innerHTML = `<b>${titleRef.value}</b>`;
+            todoDescription.innerHTML = `<b>${descriptionRef.value}</b>`;
+            markBtn.innerText = 'mark as done';
+
+            markBtn.addEventListener('click', function (event) {
+                this.innerText = 'done';
+            });
+            todoListRef.appendChild(todoTitle);
+            todoListRef.appendChild(todoDescription);
+            todoListRef.appendChild(markBtn);
+            }
+
+    </script>
+</body>
+</html>
