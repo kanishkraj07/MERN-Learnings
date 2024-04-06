@@ -2,7 +2,7 @@ const express = require("express");
 const {admin, courses} = require("../db/coursedb");
 const ADMIN_MIDDLEWARE = require("../middlewares/admin-middleware");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = 'V9BmsENzLL/Js+Lf9ygRhXDOO6KIPNpZ38p2WS26ynG8SXtBr+Ajci+COTV3JT4Y';
+const {JWT_SECRET_KEY} = require("../config");
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.post('/signup', async (req, res) => {
     const isAdminFound = await admin.findOne({username});
     if(!isAdminFound ) {
        await admin.create({username, password});
-       const token = jwt.sign({username}, SECRET_KEY, {expiresIn: "1h"});
+       const token = jwt.sign({username}, JWT_SECRET_KEY, {expiresIn: "1h"});
         res.status(200).json({
             message: "Admin Created sucessfully",
             token
@@ -32,7 +32,7 @@ app.post('/login', async (req, res) => {
 
     const isAdminFound = await admin.findOne({username, password});
     if(isAdminFound) {
-       const token = jwt.sign({username}, SECRET_KEY, {expiresIn: "1h"});
+       const token = jwt.sign({username}, JWT_SECRET_KEY, {expiresIn: "1h"});
         res.status(200).json({
             message: "Admin logged in sucessfully",
             token

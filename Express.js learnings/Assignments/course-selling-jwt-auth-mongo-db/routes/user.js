@@ -2,7 +2,7 @@ const express = require("express");
 const {users, courses} = require("../db/coursedb");
 const USER_MIDDLEWARE = require("../middlewares/user-middleware")
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = 'V9BmsENzLL/Js+Lf9ygRhXDOO6KIPNpZ38p2WS26ynG8SXtBr+Ajci+COTV3JT4Y';
+const {JWT_SECRET_KEY} = require("../config");
 const app = express();
 
 app.post('/signup', async (req, res) => {
@@ -12,7 +12,7 @@ app.post('/signup', async (req, res) => {
    const isUserFound = await users.findOne({username, password});
    if(!isUserFound) {
     await users.create({username, password});
-   const token = jwt.sign({username}, SECRET_KEY);
+   const token = jwt.sign({username}, JWT_SECRET_KEY);
     res.status(200).json({
         message: "User created successfully",
         token
@@ -30,7 +30,7 @@ app.post("/login", async (req, res) => {
 
    const isUserPresent = await users.findOne({username, password});
    if(isUserPresent) {
-   const token = jwt.sign({username}, SECRET_KEY);
+   const token = jwt.sign({username}, JWT_SECRET_KEY);
     res.status(200).json({
         message: "User logged in succesfully",
         token
@@ -58,9 +58,10 @@ app.post("/courses/:courseId", USER_MIDDLEWARE, async(req, res) => {
 });
 
 app.get("/purchasedCourses", USER_MIDDLEWARE, async (req, res) => {
-    const user = await users.findOne({username: req.headers.username, password: req.headers.password});
+    const user = await users.findOne({username: req.headers.username, password: req.headers.password});   
+    const purchasedCourses = await courses.find({_id: {$in: user.purchasedCourses}});
     res.status(200).json({
-        purchasedCourses: user.purchasedCourses
+        purchasedCourses
     })
 });
 
