@@ -1,0 +1,36 @@
+.display-todos-container {
+    width: 500px;
+    margin-top: 20px;
+    border: 1px solid rebeccapurple;
+    padding: 10px;
+}
+
+
+th {
+    width: 30%;
+    color: whitesmoke;
+}
+
+td {
+    text-align: center;
+}
+
+
+.todo-box {
+    td {
+        font-size: 17px;
+        color: black;
+    }
+}
+
+.set-to-done {
+    padding: 5px;
+    background-color: green;
+    color: whitesmoke;
+}
+
+.delete-button {
+    padding: 5px;
+    background-color: red;
+    color: whitesmoke;
+}

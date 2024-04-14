@@ -1,0 +1,17 @@
+.title, .description {
+    padding: 10px;
+    text-align: center;
+    /* width: 15em; */
+}
+
+.add-button {
+    padding: 10px 15px;
+    text-align: center;
+    background-color: brown;
+    color: white;
+    cursor: pointer;
+}
+
+.add-todo-container {
+    text-align: center;
+}

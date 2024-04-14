@@ -1,22 +1,19 @@
-import { useState } from "react";
-import {Todo} from "./todo"
+import { useCallback, useEffect, useMemo } from "react";
+import { useState, memo } from "react"
+
 function App() {
+  const[count, setCount] = useState(0);
+  console.log("1");
+
+  useEffect(() => {
+    console.log("useffect");
+  }, [count])
   
-  const [todos, setTodo] = useState([{
-    title: "walking",
-    description: "go for a walk"
-  }, {
-    title: "eating",
-    description: "eat at 12"
-  }, {
-  }]);
+  return <button onClick={() =>  {
+    setCount(count + 1);
+  }
+  }>Counter {count}</button>
 
-  return (
-    <>
-    <Todo todos={todos} setTodo={setTodo}></Todo>
-    </>
-  )
 }
-
 
 export default App
